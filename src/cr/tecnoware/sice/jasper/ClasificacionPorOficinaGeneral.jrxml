@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Test" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="urlImagen" class="java.lang.String"/>
+	<field name="oficina" class="java.lang.String"/>
+	<field name="transacciones" class="java.lang.Integer"/>
+	<field name="monto" class="java.lang.Double"/>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{monto}]]></variableExpression>
+	</variable>
+	<variable name="totalTransacciones" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{transacciones}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="89" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="83" width="549" height="4" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="63" width="343" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consulta Clasificación Por Oficina General]]></text>
+			</staticText>
+			<image>
+				<reportElement x="3" y="3" width="203" height="80"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{urlImagen}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="65" splitType="Stretch">
+			<rectangle>
+				<reportElement x="4" y="45" width="547" height="20" forecolor="#FFFFFF" backcolor="#116FB7"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="213" y="45" width="141" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[N° Transacciones]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="431" y="25" width="120" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="387" y="45" width="124" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total Montos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="45" width="188" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Oficina]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="397" y="1" width="100" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="1" width="94" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{transacciones}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="8" y="0" width="200" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{oficina}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="117" splitType="Stretch">
+			<staticText>
+				<reportElement x="163" y="37" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total Transacciones:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="163" y="61" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total Montos:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="149" y="88" width="250" height="1"/>
+			</line>
+			<line>
+				<reportElement x="152" y="25" width="250" height="1"/>
+			</line>
+			<textField pattern="#,##0.00">
+				<reportElement x="297" y="61" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="299" y="37" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{totalTransacciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

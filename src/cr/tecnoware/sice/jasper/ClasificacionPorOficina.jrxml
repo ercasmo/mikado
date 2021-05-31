@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Test" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="196"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="urlImagen" class="java.lang.String"/>
+	<field name="entidadEmisora" class="java.lang.String"/>
+	<field name="entidadCliente" class="java.lang.String"/>
+	<field name="oficinaCliente" class="java.lang.String"/>
+	<field name="serial" class="java.lang.String"/>
+	<field name="cuentaDocumento" class="java.lang.String"/>
+	<field name="cuentaDepositaria" class="java.lang.String"/>
+	<field name="tc" class="java.lang.Integer"/>
+	<field name="fecha" class="java.sql.Timestamp"/>
+	<field name="monto" class="java.lang.Double"/>
+	<variable name="subTotal" class="java.lang.Double" resetType="Group" resetGroup="Oficina" calculation="Sum">
+		<variableExpression><![CDATA[$F{monto}]]></variableExpression>
+	</variable>
+	<variable name="totalAcumulado" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{monto}]]></variableExpression>
+	</variable>
+	<variable name="fechaEmision" class="java.util.Date"/>
+	<group name="Oficina" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{oficinaCliente}]]></groupExpression>
+		<groupHeader>
+			<band height="90">
+				<rectangle>
+					<reportElement x="2" y="70" width="795" height="20" forecolor="#FFFFFF" backcolor="#116FB7"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="611" y="70" width="100" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Monto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="376" y="70" width="63" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Tipo Cheque]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="233" y="70" width="124" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Serial]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="5" y="70" width="203" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Cuenta Documento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="455" y="70" width="100" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Fecha]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="5" y="51" width="530" height="20"/>
+					<textElement verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{oficinaCliente}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="677" y="50" width="120" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="116">
+				<line>
+					<reportElement x="523" y="90" width="250" height="1"/>
+				</line>
+				<line>
+					<reportElement x="523" y="21" width="250" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="542" y="61" width="100" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement x="646" y="61" width="100" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{subTotal}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="646" y="35" width="100" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{Oficina_COUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="542" y="35" width="100" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Transacciones:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="89" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="83" width="802" height="4" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="581" y="61" width="221" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clasificación por Oficina]]></text>
+			</staticText>
+			<image>
+				<reportElement x="3" y="3" width="241" height="80"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{urlImagen}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="5" y="0" width="203" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cuentaDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="233" y="1" width="123" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{serial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="1" width="63" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{tc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="454" y="1" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="582" y="1" width="111" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="174" splitType="Stretch">
+			<staticText>
+				<reportElement x="300" y="70" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cantidad de Documentos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="94" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Monto Total Acumulado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="423" y="70" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="285" y="121" width="250" height="1"/>
+			</line>
+			<line>
+				<reportElement x="289" y="58" width="250" height="1"/>
+			</line>
+			<textField pattern="#,##0.00">
+				<reportElement x="423" y="94" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{totalAcumulado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

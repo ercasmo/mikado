@@ -1,0 +1,96 @@
+package cr.tecnoware.sice.utils;
+
+import java.sql.Date;
+import java.util.Calendar;
+import cr.tecnoware.sice.applets.bean.ChequeCorregido;
+import cr.tecnoware.sice.applets.bean.ChequesDigitalizados;
+import cr.tecnoware.sice.applets.constantes.AplicacionConstantes;
+import cr.tecnoware.sice.applets.constantes.ChequeConstantes;
+import cr.tecnoware.sice.applets.parser.CodigoMotivoParser;
+
+public class DAOUtils {
+
+	public static String createInsertQuerySaliente(ChequesDigitalizados cheque) {
+		String transaccion = null;
+		if (cheque != null) {
+			Date c = new Date(Calendar.getInstance().getTimeInMillis());
+			ChequeCorregido ch = cheque.getCheque();
+			transaccion = " values ( ";
+			// transaccion+="nextval('bac_seq_cheque_saliente'),'"+ch.getCodigoBanco()+"','"+cheque.getEntidadProcesadora()+"','"+cheque.getEntidadProcesadora()+"',";
+			transaccion += "'" + ch.getCodigoBanco() + "','" + cheque.getEntidadProcesadora() + "','" + cheque.getEntidadProcesadora() + "',";
+			transaccion += "'1','" + ch.getCodigoOficina() + "','" + ch.getCuenta() + "','" + ChequeConstantes.CHEQUE_SALIENTE_RECIBIDO_REGIONAL + "',";
+			transaccion += "'" + c + "','" + cheque.getFecha() + "','" + cheque.getReferenciaUnica() + "','" + cheque.getIdLote() + "','" + ch.getMonto() + "','" + cheque.getIdLote() + "','" + cheque.getReferenciaUnica() + ChequeConstantes.IMAGEN_ANVERSO + "',";
+			transaccion += "'" + ch.getSerial() + "','" + ChequeConstantes.CHEQUE_CON_SOPORTE_FISICO + "','" + ChequeConstantes.CHEQUE_CON_SOPORTE_DIGITAL + "','" + ch.getTipoCheque() + "',";
+			transaccion += "'" + cheque.getIdLote() + "','" + cheque.getPosicionLote() + "','" + ch.getCodigoOficina() + "',0";
+			// ,lote,secuencia,codigo_oficina_procesadora,codigo_motivo_devolucion
+			transaccion += " ) ";			
+		}
+		return transaccion;
+	}
+
+	public static String createInsertQueryEntrante(ChequesDigitalizados cheque) {
+		String transaccion = null;
+		if (cheque != null) {
+			Date c = new Date(Calendar.getInstance().getTimeInMillis());
+			ChequeCorregido ch = cheque.getCheque();
+			int entidadProcesadora = cheque.getEntidadProcesadora();
+			int codigoMotivo = CodigoMotivoParser.obtenerCodigoMotivoEntrante(cheque.getEstado());
+			int procesoDevolucion = (codigoMotivo > 0) ? AplicacionConstantes.PROCESO_DEVOLUCION_CUENTA : AplicacionConstantes.PROCESO_DEVOLUCION_CORRECTO;
+			String referenciaIBRN = cheque.getCheque().getSerial() + cheque.getCheque().getCuenta();
+			transaccion = " values ( ";
+			// transaccion+="nextval('bac_seq_cheque_entrante'),'"+ch.getCodigoBanco()+"','"+ch.getCodigoBanco()+"','"+cheque.getEntidadProcesadora()+"',";
+			transaccion += "'" + entidadProcesadora + "','" + Integer.parseInt(ch.getCodigoBanco()) + "','" + cheque.getEntidadProcesadora() + "',";
+			transaccion += "'1','" + ch.getCodigoOficina() + "','" + Utils.fillZerosLeft(Utils.removeLeadingZeros(ch.getCuenta()), ChequeConstantes.CHEQUE_LONGITUD_CUENTA) + "','" + ChequeConstantes.CHEQUE_SALIENTE_RECIBIDO_REGIONAL + "',";
+			transaccion += "'" + c + "','" + cheque.getFecha() + "','" + cheque.getReferenciaUnica() + "','" + cheque.getIdLote() + "','" + ch.getMonto() + "','" + cheque.getPosicionLote() + "','" + cheque.getReferenciaUnica() + ChequeConstantes.IMAGEN_ANVERSO + "',";
+			transaccion += "'" + cheque.getPosicionLote() + "','" + Utils.fillZerosLeft(Utils.removeLeadingZeros(ch.getSerial()), ChequeConstantes.CHEQUE_LONGITUD_SERIAL) + "','" + ch.getTipoCheque() + "',";
+			transaccion += codigoMotivo + ",0,0,'','" + referenciaIBRN + "'," + procesoDevolucion;
+			transaccion += " ) ";
+			System.out.println(transaccion);
+		}
+		return transaccion;
+	}
+
+	public static String createInsertQueryInterno(ChequesDigitalizados cheque) {
+		String transaccion = null;
+		if (cheque != null) {
+			Date c = new Date(Calendar.getInstance().getTimeInMillis());
+			ChequeCorregido ch = cheque.getCheque();
+			// go_banco_cheque, codigo_entidad_emisora,
+			// codigo_entidad_procesadora,
+			// codigo_moneda,codigo_oficina_cheque, cuenta_cheque, estado,
+			// fecha, fecha_camara, ibrn_interno, id_lote, monto_cheque,
+			// numero_lote,referencia_imagen,
+			// serial_cheque, soporte_digital, soporte_fisico, tipo_cheque) ";
+			String oficinaCheque = cr.tecnoware.sice.applets.utils.Utils.obtenerOficina(ch.getCuenta(), AplicacionConstantes.CAMARA_ENTRANTE);
+			int codigoOficinaProcesadora = -1;
+			try {
+				codigoOficinaProcesadora = Integer.parseInt(ch.getCodigoOficina());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			transaccion = " values ( ";
+			transaccion += "'" + ch.getCodigoBanco() + "','" + ch.getCodigoBanco() + "','" + cheque.getEntidadProcesadora() + "',";
+			transaccion += "1,'" + oficinaCheque + "','" + ch.getCuenta() + "','" + ChequeConstantes.CHEQUE_SALIENTE_RECIBIDO_REGIONAL + "',";
+			transaccion += "'" + c + "','" + cheque.getFecha() + "','" + cheque.getReferenciaUnica() + "','" + cheque.getIdLote() + "','" + ch.getMonto() + "','" + cheque.getIdLote() + "','" + cheque.getReferenciaUnica() + ChequeConstantes.IMAGEN_ANVERSO + "',";
+			transaccion += "'" + ch.getSerial() + "','" + ChequeConstantes.CHEQUE_CON_SOPORTE_FISICO + "','" + ChequeConstantes.CHEQUE_CON_SOPORTE_DIGITAL + "','" + ch.getTipoCheque() + "'," + cheque.getPosicionLote() + ",0," + codigoOficinaProcesadora;
+			transaccion += " ) ";
+		}
+		return transaccion;
+	}
+
+	public static String createInsertQueryExterno(ChequesDigitalizados cheque) {
+		String transaccion = null;
+		if (cheque != null) {
+			Date c = new Date(Calendar.getInstance().getTimeInMillis());
+			ChequeCorregido ch = cheque.getCheque();
+			transaccion = " values ( ";
+			transaccion += "'" + ch.getCodigoBanco() + "','" + cheque.getEntidadProcesadora() + "','" + cheque.getEntidadProcesadora() + "',";
+			transaccion += "'1','" + ch.getCodigoOficina() + "','" + ch.getCuenta() + "','" + ChequeConstantes.CHEQUE_SALIENTE_RECIBIDO_REGIONAL + "',";
+			transaccion += "'" + c + "','" + cheque.getFecha() + "','" + cheque.getReferenciaUnica() + "','" + cheque.getIdLote() + "','" + ch.getMonto() + "','" + cheque.getIdLote() + "','" + cheque.getReferenciaUnica() + ChequeConstantes.IMAGEN_ANVERSO + "',";
+			transaccion += "'" + ch.getSerial() + "','" + ChequeConstantes.CHEQUE_CON_SOPORTE_FISICO + "','" + ChequeConstantes.CHEQUE_CON_SOPORTE_DIGITAL + "','" + ch.getTipoCheque() + "'";
+			transaccion += " ) ";
+		}
+		return transaccion;
+	}
+
+}
