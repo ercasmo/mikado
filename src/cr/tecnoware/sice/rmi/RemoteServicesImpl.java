@@ -65,6 +65,7 @@ import cr.tecnoware.sice.services.AuditoriaTransaccionService;
 import cr.tecnoware.sice.services.FactoryDAOService;
 import cr.tecnoware.sice.services.ManejadorReportesService;
 import cr.tecnoware.sice.services.SignatureService;
+import cr.tecnoware.sice.services.refactor.impl.CatalagoServiceImpl;
 import cr.tecnoware.sice.transfer.FTPUtils;
 import cr.tecnoware.sice.utils.CacheUtils;
 import cr.tecnoware.sice.utils.Utils;
@@ -80,7 +81,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger("application");
 
-	// No cambió - Ojo
+	// No cambiÃ³ - Ojo
 
 	public List<ImageSignature> getGroupImages(String[] bancoReceptor, String[] anho, String[] mes, String[] dia, String[] bancoEmisor, String[] refImagen) {
 		List<ImageSignature> lista = new ArrayList<ImageSignature>();
@@ -119,7 +120,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return lista;
 	}
 
-	// Si cambió
+	// Si cambiÃ³
 
 	public ImageSignature getImage(String bancoReceptor, String anho, String mes, String dia, String bancoEmisor, String refImagen) {
 		ImageSignature imgFirma = null;
@@ -172,7 +173,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return imgFirma;
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public List<ImageSignature> getGroupImagesRevision(String[] bancoReceptor, String[] anho, String[] mes, String[] dia, String[] bancoEmisor, String[] refImagen, String[] cuentaCliente) throws RemoteException {
 		List<ImageSignature> lista = new ArrayList<ImageSignature>();
@@ -199,7 +200,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return lista;
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public ImageSignature getImageRevision(String bancoReceptor, String anho, String mes, String dia, String bancoEmisor, String refImagen, String cuentaCliente, int firmas) throws RemoteException {
 		try {
@@ -223,23 +224,19 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public List<Entidad> getEntidades() {
-		EntidadDAO dao = new EntidadDAO();
-		List<Entidad> lista = dao.getAll();
-		return lista;
+		return new CatalagoServiceImpl().getEntidades();
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public List<Oficina> getOficinas() {
-		OficinaDAO dao = new OficinaDAO();
-		List<Oficina> lista = dao.getAll();
-		return lista;
+		return new CatalagoServiceImpl().getOficinas();
 	}
 
-	// Si cambió
+	// Si cambiÃ³
 
 	public int setDocumento(TransaccionEntrante transaccion, byte[] frente, byte[] reverso, byte[] uv, String usuario, String direccion) throws RemoteException {
 		TransaccionEntranteDAO dao = new TransaccionEntranteDAO();
@@ -347,7 +344,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return lista;
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public boolean actualizarListadoTransacciones(List<TransaccionEntrante> lista, String usuario, String ip) throws RemoteException {
 		try {
@@ -461,7 +458,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		}
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public byte[] generarImagenesPDF(Object reporteImagen) throws RemoteException {
 		ManejadorReportesService manejador = new ManejadorReportesService();
@@ -471,7 +468,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return manejador.generarReporte(listaPatch, ReporteConstantes.TIPO_CONSULTA_IMAGEN, patch);
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public byte[] generarReportePDF(int tipoReporte, List<Object> listado) throws RemoteException {
 		ManejadorReportesService manejador = new ManejadorReportesService();
@@ -480,7 +477,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return arreglo;
 	}
 
-	// No cambió - Ojo
+	// No cambiÃ³ - Ojo
 
 	public List<ImageSignature> getGroupImagesSalientes(String[] bancoReceptor, String[] anho, String[] mes, String[] dia, String[] bancoEmisor, String[] refImagen) throws RemoteException {
 		List<ImageSignature> lista = new ArrayList<ImageSignature>();
@@ -516,7 +513,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return lista;
 	}
 
-	// Si cambió
+	// Si cambiÃ³
 
 	public ImageSignature getImageSaliente(String bancoReceptor, String anho, String mes, String dia, String bancoEmisor, String refImagen) throws RemoteException {
 		ConexionRemotaBean miConexion = new ConexionRemotaBean();
@@ -553,7 +550,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		}
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public List<TransaccionEntrante> getTransaccionesDigitalizarEntrante(int entidadProcesadora) throws RemoteException {
 		EntidadDAO entidadDao = new EntidadDAO();
@@ -584,7 +581,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		}
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public int setDocumentoSaliente(TransaccionSaliente transaccion, int estado, String usuario, String direccion) throws RemoteException {
 		try {
@@ -675,7 +672,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return daoLote.updateLote(lote);
 	}
 
-	// Si cambió
+	// Si cambiÃ³
 	public Map<Integer, Integer> setDigitalizacionSaliente(List<DigitalizadoSaliente> listadoDigitalizacion, String entidadProcesadora, String usuario, String ip) throws RemoteException {
 		Map<Integer, Integer> contador = new LinkedHashMap<Integer, Integer>();
 		ConexionRemotaBean miConexion = new ConexionRemotaBean();
@@ -722,7 +719,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return contador;
 	}
 
-	// Si cambió
+	// Si cambiÃ³
 
 	public int setDocumentoDigitalizarSaliente(TransaccionSaliente transaccion, byte[] frente, byte[] reverso, byte[] uv, String usuario, String direccion) throws RemoteException {
 		TransaccionSalienteDAO dao = new TransaccionSalienteDAO();
@@ -762,7 +759,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		}
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public List<TransaccionEntrante> getTransaccionesEntrantes(int entidadProcesadora, Date fecha) throws RemoteException {
 		EntidadDAO entidadDao = new EntidadDAO();
@@ -786,7 +783,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public String getReferenciaCaja(Date fechaProceso) throws RemoteException {
 		ArchivadorChequeEntranteDAO dao = new ArchivadorChequeEntranteDAO();
@@ -797,7 +794,7 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 		return null;
 	}
 
-	// No cambió
+	// No cambiÃ³
 
 	public int setDataArchivador(Map<Integer, LinkedList<TransaccionEntrante>> transacciones, Date fecha) throws RemoteException {
 		try {
@@ -841,10 +838,10 @@ public class RemoteServicesImpl extends UnicastRemoteObject implements RemoteSer
 	public List<BolsilloClasificacion> getBolsilloClasificacion(int tipo, int codigoEntidadProcesadora) throws RemoteException {
 		BolsilloDAO dao = new BolsilloDAO();
 		List<BolsilloClasificacion> lista = null;
-System.out.println("TIPO DE CLASIFICACION "+tipo);
-System.out.println("BANCO "+AplicacionConstantes.CLASIFICACION_BANCO);
-System.out.println("OFICINA "+AplicacionConstantes.CLASIFICACION_OFICINA);
-System.out.println("ENTRANTE P "+AplicacionConstantes.CLASIFICACION_ENTRANTE_PERSONALIZADA);
+		System.out.println("TIPO DE CLASIFICACION "+tipo);
+		System.out.println("BANCO "+AplicacionConstantes.CLASIFICACION_BANCO);
+		System.out.println("OFICINA "+AplicacionConstantes.CLASIFICACION_OFICINA);
+		System.out.println("ENTRANTE P "+AplicacionConstantes.CLASIFICACION_ENTRANTE_PERSONALIZADA);
 
 
 		if (tipo == AplicacionConstantes.CLASIFICACION_BANCO) {
@@ -911,6 +908,7 @@ System.out.println("ENTRANTE P "+AplicacionConstantes.CLASIFICACION_ENTRANTE_PER
 	// Trae lista de cheques con estado maracod como incosistente con archivo
 	// verilect
 	public List<TransaccionInterna> getTransaccionesInconsistenciasVerilect(Date fecha) throws RemoteException {
+
 		TransaccionInternaDAO dao = new TransaccionInternaDAO();
 		try {
 			Calendar fechaInicio = Calendar.getInstance();
